@@ -73,5 +73,18 @@ async def handle_message(update, context):
     await update.message.reply_text("✅ Готово!")
 
 app = Application.builder().token(BOT_TOKEN).build()
+ydl_opts = {
+    "format": "bestaudio/best",
+    "outtmpl": "track.%(ext)s",
+    "quiet": True,
+    "no_warnings": True,
+    "default_search": "scsearch",
+    "ffmpeg_location": "/usr/bin/ffmpeg",
+    "postprocessors": [{
+        "key": "FFmpegExtractAudio",
+        "preferredcodec": "mp3",
+        "preferredquality": "192",
+    }],
+}
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.run_polling()
