@@ -2,12 +2,12 @@ import os, asyncio, yt_dlp, requests, spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from telegram.ext import Application, MessageHandler, filters
 
-BOT_TOKEN = os.environ["8899070657:AAG7EXb4Mb8cYux59xAO0D2rC-Oujt_PQDc"]
-CHANNEL_ID = os.environ["@MAINMusiccc"]
+BOT_TOKEN = os.environ["BOT_TOKEN"]
+CHANNEL_ID = os.environ["CHANNEL_ID"]
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
-    client_id=os.environ["8cfa98461e014f22905095b56567c554"],
-    client_secret=os.environ["959ac2e5d6604c04b1380c01f9125370"]
+    client_id=os.environ["SPOTIFY_CLIENT_ID"],
+    client_secret=os.environ["SPOTIFY_CLIENT_SECRET"]
 ))
 
 def search_spotify(query):
@@ -40,21 +40,16 @@ def download_audio(query):
 async def handle_message(update, context):
     query = update.message.text.strip()
     await update.message.reply_text(f"🔍 Ищу: {query}...")
-
     meta = search_spotify(query)
     if not meta:
         await update.message.reply_text("❌ Не найдено на Spotify")
         return
-
     full_title = f"{meta['artist']} – {meta['title']}"
     await update.message.reply_text(f"✅ {full_title}\n⬇️ Скачиваю...")
-
     audio_path = download_audio(full_title)
-
     img_data = requests.get(meta["cover_url"]).content
     with open("cover.jpg", "wb") as f:
         f.write(img_data)
-
     with open("cover.jpg", "rb") as photo:
         await context.bot.send_photo(
             chat_id=CHANNEL_ID,
@@ -68,7 +63,6 @@ async def handle_message(update, context):
             title=meta["title"],
             performer=meta["artist"],
         )
-
     await update.message.reply_text("✅ Отправлено в канал!")
     os.remove(audio_path)
     os.remove("cover.jpg")
