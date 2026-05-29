@@ -2,7 +2,7 @@ import os, asyncio, yt_dlp, requests, spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from telegram.ext import Application, MessageHandler, filters
 
-BOT_TOKEN = os.environ["8899070657:AAEHIRufpmT-afPy2ulNeYk0dBfYGklSyeI"]
+BOT_TOKEN = os.environ["8899070657:AAG7EXb4Mb8cYux59xAO0D2rC-Oujt_PQDc"]
 CHANNEL_ID = os.environ["@MAINMusiccc"]
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
